@@ -19,12 +19,13 @@
     <!--排除静态文件-->
     <mvc:resources mapping="/*" location="/"/>
 
-
-<!--    <aop:config proxy-target-class="true"/>-->
-
-<!--    <bean class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
-
-<!--    <bean id="sourceAdvisor" class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
-<!--        <property name="securityManager" ref="securityManager"/>-->
-<!--    </bean>-->
+    <!-- 🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹  使用注解的方式进行shiro 授权 🌹🌹🌹🌹🌹🌹-->
+    <!--开启aop-->
+    <aop:config proxy-target-class="true"/>
+    <bean class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <bean id="sourceAdvisor" class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <!--注入SecurityManager对象-->
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+    <!-- 🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹 使用注解的方式进行shiro 授权  🌹🌹🌹🌹🌹🌹🌹🌹-->
 </beans>

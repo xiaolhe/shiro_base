@@ -8,8 +8,13 @@
 
     <!--4.加载spring-dao.xml 配置文件-->
     <import resource="spring-dao.xml"/>
+    <import resource="spring-redis.xml"/>
     <!--扫描-->
     <context:component-scan base-package="com.xiaolhe.shiro.web"/>
+
+    <!--3. 自定义filter 配置-->
+    <bean id="rolesOrFilter" class="com.xiaolhe.shiro.web.filter.RolesOrFilter" />
+
 
     <!--创建shiro拦截器-->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -25,15 +30,32 @@
                 <!--🐇🐇  anon 不需要任何验证，可以直接访问-->
                 /login.html = anon
                 <!--提交登录不需要认证-->
+<!--                /role = roles["admin","admin1"]   这种方式表明：只有同时满足admin 和 admin1 的角色，才可以访问该路径 如果只需要满足一个角色，
+                                                      可以自定义RolesFilter 角色过滤器，shiro自定义过滤器可以设置，只需要满足一个admin角色，即可访问该路径或多个也可以
+-->
+                /testroles = roles["admin","admin1"] <!--  需要同时满足两个角色才可以访问-->
+                /testroles1 = rolesOrFilter["admin","admin1"] <!--自定义过滤器  -->
                 /sublogin = anon
                 /* = authc
             </value>
         </property>
+
+        <!--3.1 自定义filter 配置-->
+        <property name="filters">
+            <util:map>
+                <entry key="rolesOrFilter" value-ref="rolesOrFilter" />
+            </util:map>
+        </property>
     </bean>
+
+
+
     <!--1.创建SecurityManager-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <!-- 创建 SecurityManager 对象 -->
+        <!-- 引入自定义realm对象 -->
         <property name="realm" ref="realm"/>
+        <!-- 引入自定义sessionManager对象 -->
+        <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
     <!--2.创建自定义Realm-->
@@ -48,5 +70,12 @@
         <property name="hashIterations" value="1"/>
     </bean>
 
+    <!--5.配置session-->
+<!--    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">-->
+    <bean id="sessionManager" class="com.xiaolhe.shiro.web.session.CustomSessionManager">
+        <property name="sessionDAO" ref="redisSession"/>
+    </bean>
+    <!--5.4自定义RedisSession-->
+    <bean id="redisSession" class="com.xiaolhe.shiro.web.session.RedisSession"/>
 
 </beans>

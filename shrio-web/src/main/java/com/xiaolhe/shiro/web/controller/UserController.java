@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * <p>
  *     用户登录
  * </p>
- * @author: 陆袆 >_<
+ * @author: 陆袆 >_<注解
  * @email: amixiao@qq.com
  * @createTime: 2020-09-04  15:07
  */
@@ -44,7 +45,22 @@ public class UserController {
         }
 
         return " 未获得权限！请联系管理员进行添加权限！";
-
-
     }
+
+
+    //shiro过滤器
+    @RequestMapping(value = "/testroles",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String testRole(){
+        return "success admin shirofilter";
+    }
+
+
+    //custom过滤器
+    @RequestMapping(value = "/testroles1",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String testRole1(){
+        return "success admin customfilter";
+    }
+
 }
