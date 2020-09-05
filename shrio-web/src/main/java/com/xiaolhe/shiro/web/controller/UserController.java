@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +33,18 @@ public class UserController {
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
         try {
             subject.login(token);
+
         } catch (AuthenticationException e) {
             e.getMessage();
             return "登录异常";
         }
-        return "登录成功";
+        //判断角色
+        if(subject.hasRole("admin")){
+            return "您现在是管理员权限";
+        }
+
+        return " 未获得权限！请联系管理员进行添加权限！";
+
+
     }
 }

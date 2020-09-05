@@ -1,36 +1,35 @@
-package com.xiaolhe.shiro.realm;
+package com.xiaolhe.shiro.web.realm;
 
+import com.xiaolhe.shiro.web.dao.UserDao;
+import com.xiaolhe.shiro.web.vo.User;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * <p>
  *     自定义realm
- *     未加密加盐
+ *     已经加密加盐
  * </p>
  * @author: 陆袆 >_<
  * @email: amixiao@qq.com
  * @createTime: 2020-09-04  10:12
  */
-public class CustomRealm extends AuthorizingRealm {
+public class CustomRealmJDBC extends AuthorizingRealm {
 
-    //模拟数据
-    Map<String ,String > map = new HashMap<>(16);
-    {
-        map.put("xiaolhe","123");
-        super.setName("CustomRealm");
-    }
+
+    @Resource
+    private UserDao userDao;
 
     /**
      * 授权
@@ -61,9 +60,8 @@ public class CustomRealm extends AuthorizingRealm {
      * @return
      */
     private Set<String> getPremisssionByUserName(String userName) {
-        Set<String> sets = new HashSet<>();
-        sets.add("user:delete");
-        sets.add("user:add");
+        List<String> list = userDao.queryPremisssionByUserName(userName);
+        Set<String> sets = new HashSet<>(list);
         return sets;
     }
 
@@ -76,11 +74,8 @@ public class CustomRealm extends AuthorizingRealm {
      * @return
      */
     private Set<String> getRolesByUserName(String userName) {
-        Set<String> sets = new HashSet<>();
-        //设置管理员角色
-        sets.add("admin");
-        //设置普通用户角色
-        sets.add("user");
+        List<String> list = userDao.queryRolesByUserName(userName);
+        Set<String> sets = new HashSet<>(list);
         return sets;
 
     }
@@ -105,7 +100,9 @@ public class CustomRealm extends AuthorizingRealm {
             return null;
         }
         //如果密码存在，创建SimpleAuthenticationInfo 对象，返回simpleAuthenticationInfo 信息
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo("xiaolhe",password,"customRealm");
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(userName,password,"CustomRealmJDBC");
+        //加盐后，(可以自定义：随机数或其他）
+        simpleAuthenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(userName));
         return simpleAuthenticationInfo;
     }
 
@@ -118,6 +115,16 @@ public class CustomRealm extends AuthorizingRealm {
      */
     private String getPasswordByUserName(String userName) {
         //通过用户名获取凭证
-        return map.get(userName);
+        User user = userDao.queryUserByUserName(userName);
+        //判断用户如果不为空，
+        if (user !=null){
+            user.getPassword();
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        Md5Hash hash = new Md5Hash("123","xiaolhe");
+        System.out.println(hash.toString());
     }
 }
