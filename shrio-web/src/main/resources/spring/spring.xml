@@ -58,6 +58,8 @@
         <property name="sessionManager" ref="sessionManager"/>
         <!--引入自定义RedisCacheManager对象-->
         <property name="cacheManager" ref="cacheManager"/>
+        <!--引入自定义cookieRememberMeManager对象-->
+        <property name="rememberMeManager" ref="cookieRememberMeManager"/>
     </bean>
 
     <!--2.创建自定义Realm-->
@@ -84,4 +86,14 @@
 
     <!--6.创建RedisCacheManager缓存对象 配置-->
     <bean id="cacheManager" class="com.xiaolhe.shiro.web.cache.RedisCacheManager"/>
+
+    <!--7.实现cookie自动登录 配置-->
+    <bean id="cookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <!--设置cookie存活的时间，单位是秒-->
+        <property name="maxAge" value="604800"/>
+    </bean>
+    <bean id="cookieRememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cookie" ref="cookie"/>
+    </bean>
 </beans>

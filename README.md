@@ -22,3 +22,20 @@
  - 创建RedisCache ，实现Cache
  - 在spring.xml中配置bean对象，并在SecurityManager引入bean对象
  
+  >🍎 新增 Shiro自动登录
+  - 在spring.xml中配置cookie对象，并在SecurityManager引入bean对象
+  - 在vo类，添加属性 
+  ```java
+   private boolean rememberMe;//记住我
+  ```
+   然后在页面login.html中添加代码
+   ```html
+ <input type="checkbox" onclick="document.getElementById('rememberMe').value=document.getElementById('rememberMe').value==='false';"/>记住我<br/>
+```
+  - 在controller层添加代码
+  ```java
+   token.setRememberMe(user.isRememberMe());
+```
+  - 
+  
+ 

@@ -33,6 +33,8 @@ public class UserController {
         //2.主体提交请求
         UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
         try {
+            //shiro自动登录
+            token.setRememberMe(user.isRememberMe());
             subject.login(token);
 
         } catch (AuthenticationException e) {
