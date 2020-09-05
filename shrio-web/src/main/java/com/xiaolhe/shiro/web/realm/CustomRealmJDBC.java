@@ -74,6 +74,7 @@ public class CustomRealmJDBC extends AuthorizingRealm {
      * @return
      */
     private Set<String> getRolesByUserName(String userName) {
+        System.out.println("从数据库中获取获取授权数据...");
         List<String> list = userDao.queryRolesByUserName(userName);
         Set<String> sets = new HashSet<>(list);
         return sets;

@@ -56,6 +56,8 @@
         <property name="realm" ref="realm"/>
         <!-- 引入自定义sessionManager对象 -->
         <property name="sessionManager" ref="sessionManager"/>
+        <!--引入自定义RedisCacheManager对象-->
+        <property name="cacheManager" ref="cacheManager"/>
     </bean>
 
     <!--2.创建自定义Realm-->
@@ -75,7 +77,11 @@
     <bean id="sessionManager" class="com.xiaolhe.shiro.web.session.CustomSessionManager">
         <property name="sessionDAO" ref="redisSession"/>
     </bean>
+
     <!--5.4自定义RedisSession-->
     <bean id="redisSession" class="com.xiaolhe.shiro.web.session.RedisSession"/>
 
+
+    <!--6.创建RedisCacheManager缓存对象 配置-->
+    <bean id="cacheManager" class="com.xiaolhe.shiro.web.cache.RedisCacheManager"/>
 </beans>
