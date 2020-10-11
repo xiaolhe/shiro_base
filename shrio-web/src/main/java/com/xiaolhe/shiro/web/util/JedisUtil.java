@@ -30,6 +30,7 @@ public class JedisUtil {
         }
     }
 
+    //设置过期时间
     public void expire(byte[] key, int expireTime) {
         try (Jedis jedis = getResource()) {
             jedis.expire(key, expireTime);
@@ -40,12 +41,14 @@ public class JedisUtil {
         return jedisPool.getResource();
     }
 
+    //获取key
     public byte[] get(byte[] key) {
         try (Jedis jedis = getResource()) {
             return jedis.get(key);
         }
     }
 
+    //删除key
     public void delete(byte[] key) {
         try (Jedis jedis = getResource()) {
             jedis.del(key);

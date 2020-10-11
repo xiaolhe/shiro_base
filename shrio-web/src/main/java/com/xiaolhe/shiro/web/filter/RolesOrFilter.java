@@ -17,6 +17,9 @@ import javax.servlet.ServletResponse;
  */
 public class RolesOrFilter extends AuthorizationFilter {
 
+    /**
+     * 授权访问资源
+     */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object object) throws Exception {
 

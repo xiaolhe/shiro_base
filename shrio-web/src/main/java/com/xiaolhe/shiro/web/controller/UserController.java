@@ -1,13 +1,10 @@
 package com.xiaolhe.shiro.web.controller;
 
-import com.xiaolhe.shiro.web.common.ResponseResult;
 import com.xiaolhe.shiro.web.vo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.apache.shiro.authz.permission.WildcardPermission;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

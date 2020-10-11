@@ -98,6 +98,7 @@ public class RedisSession extends AbstractSessionDAO {
      */
     @Override
     public void update(Session session) throws UnknownSessionException {
+        //保存session
            saveSession(session);
     }
 
@@ -108,7 +109,7 @@ public class RedisSession extends AbstractSessionDAO {
     @Override
     public void delete(Session session) {
         //如果session 和 sessionID 不为nll
-        if ( session != null || session.getId() !=null){
+        if (session != null || session.getId() !=null){
             //啥也不干，仅返回
             return;
         }
