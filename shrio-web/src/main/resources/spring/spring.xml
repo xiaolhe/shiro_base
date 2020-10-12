@@ -75,7 +75,7 @@
     </bean>
 
     <!--5.配置session-->
-<!--    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">-->
+<!--    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager"> 由于默认的sessionManager多次请求，影响性能，所以自定义sessionManager-->
     <bean id="sessionManager" class="com.xiaolhe.shiro.web.session.CustomSessionManager">
         <property name="sessionDAO" ref="redisSession"/>
     </bean>
